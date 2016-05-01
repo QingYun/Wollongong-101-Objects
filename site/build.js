@@ -14,6 +14,7 @@ function onFinish(err, stats) {
     return handleSoftErrors(jsonStats.errors);
   if(jsonStats.warnings.length > 0)
     handleWarnings(jsonStats.warnings);
+  console.log(chalk.green(stats.toString()));
   buildTemplate();
 }
 
