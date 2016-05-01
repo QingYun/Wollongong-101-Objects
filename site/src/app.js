@@ -1,1 +1,1 @@
-console.log("Hello World");
+require("./stylesheets/app.scss");

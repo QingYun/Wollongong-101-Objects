@@ -47,9 +47,9 @@ if (production) {
 module.exports = {
     debug:   !production,
     devtool: production ? false : 'eval',
-    entry: "./src/app.js",
+    entry: path.join(__dirname, "src", "app.js"),
     output: {
-        path: path.resolve(__dirname, "./built/js"),
+        path: path.join(__dirname, "built", "js"),
         filename: "bundle.js"
     },
     resolveLoader: {
