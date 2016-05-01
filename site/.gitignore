@@ -41,3 +41,6 @@ built
 
 # webpack cache file
 webpack.cache.json
+
+# compiled docx files
+asset/*
