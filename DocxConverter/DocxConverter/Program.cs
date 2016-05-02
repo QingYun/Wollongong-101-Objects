@@ -108,14 +108,14 @@ namespace DocxConverter
         });
     }
 
-    static string takeParagraphContentStartsWith(ref List<JArray> paragraphs, string to_search)
+    static List<JArray> takeParagraphStartWith(ref List<JArray> paragraphs, string to_search)
     {
-      var target = paragraphs.SingleOrDefault(
+      var targets = paragraphs.Where(
         p => p.Count == 1
               && p.First.Value<string>("type") == "text"
               && p.First.Value<string>("content").StartsWith(to_search, StringComparison.CurrentCultureIgnoreCase));
-      paragraphs.Remove(target);
-      return target.First.Value<string>("content");
+      paragraphs.Except(targets);
+      return targets.ToList(); /*.First.Value<string>("content");*/
     }
 
     static R protectOn<R>(string file, string part, Func<R> getDefault, Func<R> action)
@@ -155,10 +155,9 @@ namespace DocxConverter
       var tags = protectOn(file_name, "tag", () => new string[] { },
         () => 
         {
-          return takeParagraphContentStartsWith(ref paragraphs, "tag:")
-            // remove "tag:"
-            .Substring(4)
-            .Split(',')
+          return takeParagraphStartWith(ref paragraphs, "tag:")
+            // take content & remove initial "tag:"
+            .Select(p => p.First.Value<string>("content").Substring(4))
             .Select(w => w.Trim().ToUpper())
             .Where(w => w != "");
         });
@@ -166,7 +165,9 @@ namespace DocxConverter
       var name = protectOn(file_name, "name", () => "",
         () => 
         {
-          return takeParagraphContentStartsWith(ref paragraphs, "name:")
+          return takeParagraphStartWith(ref paragraphs, "name:")
+            .Select(p => p.First.Value<string>("content"))
+            .Single()
             // remove "name:"
             .Substring(5)
             .Trim();
@@ -176,7 +177,9 @@ namespace DocxConverter
         () => 
         {
           return int.Parse(
-            takeParagraphContentStartsWith(ref paragraphs, "index:")
+            takeParagraphStartWith(ref paragraphs, "index:")
+              .Select(p => p.First.Value<string>("content"))
+              .Single()
               // remove "index:"
               .Substring(6)
               .Trim());
