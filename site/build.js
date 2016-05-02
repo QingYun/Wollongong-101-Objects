@@ -2,6 +2,7 @@ var webpack = require("webpack"),
     chalk = require("chalk"),
     Mustache = require("mustache"),
     fs = require("fs"),
+    argv = require("optimist").argv,
     webpack_config = require("./webpack.config.js");
 
 var compiler = webpack(webpack_config);
@@ -57,7 +58,7 @@ function buildTemplate() {
   });
 }
 
-if (process.env.WEBPACK_WATCH !== undefined) {
+if (argv.watch) {
   compiler.watch({
     aggregateTimeout: 300,
     poll: true
