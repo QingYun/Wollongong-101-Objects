@@ -1,8 +1,17 @@
 var webpack = require("webpack");
 var path = require("path");
 var production = process.env.NODE_ENV === 'production';
+var PersistentCacheWebpackPlugin = require('persistent-cache-webpack-plugin');
 
-var plugins = [];
+var plugins = [
+  new PersistentCacheWebpackPlugin({
+    file   : './webpack.cache.json',
+    warn   : true,
+    stats  : false,
+    persist: true,
+    ignore : []
+  })
+];
 
 if (production) {
     plugins = plugins.concat([

@@ -28,6 +28,7 @@
     "mustache-loader": "^0.3.1",
     "node-sass": "^3.6.0",
     "optimist": "^0.6.1",
+    "persistent-cache-webpack-plugin": "0.0.1",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0"

@@ -38,3 +38,6 @@ jspm_packages
 
 # build result
 built
+
+# webpack cache file
+webpack.cache.json
