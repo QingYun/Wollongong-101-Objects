@@ -38,7 +38,7 @@ namespace DocxConverter
       foreach (var file in Directory.GetFiles(dir))
       {
         yield return Tuple.Create(
-          file, 
+          file,
           WordprocessingDocument.Open(file, false));
       }
       yield break;
@@ -140,7 +140,7 @@ namespace DocxConverter
       var main_part = doc.MainDocumentPart;
 
       var paragraphs = protectOn(file_name, "description", () => new List<JArray>(),
-        () => 
+        () =>
         {
           var hyperlinks = main_part.HyperlinkRelationships;
           return main_part.Document.Body.OfType<Paragraph>()
@@ -153,7 +153,7 @@ namespace DocxConverter
         });
 
       var tags = protectOn(file_name, "tag", () => new string[] { },
-        () => 
+        () =>
         {
           return takeParagraphStartWith(ref paragraphs, "tag:")
             // take content & remove initial "tag:"
@@ -163,7 +163,7 @@ namespace DocxConverter
         });
 
       var name = protectOn(file_name, "name", () => "",
-        () => 
+        () =>
         {
           return takeParagraphStartWith(ref paragraphs, "name:")
             .Select(p => p.First.Value<string>("content"))
@@ -174,7 +174,7 @@ namespace DocxConverter
         });
 
       var index = protectOn(file_name, "index", () => 0,
-        () => 
+        () =>
         {
           return int.Parse(
             takeParagraphStartWith(ref paragraphs, "index:")
@@ -209,12 +209,12 @@ namespace DocxConverter
                 };
               })
             .Aggregate(new JArray(),
-              (arr, img) => 
+              (arr, img) =>
               {
                 arr.Add(JObject.FromObject(img));
                 return arr;
               });
-            
+
         });
 
       var obj = JObject.FromObject(new {
@@ -240,7 +240,7 @@ namespace DocxConverter
 
     static JObject formResultJSON(JObject obj, JObject doc)
     {
-      obj.Value<JArray>("tags").Merge(doc.Value<JArray>("tags"), 
+      obj.Value<JArray>("tags").Merge(doc.Value<JArray>("tags"),
         new JsonMergeSettings
         {
           MergeArrayHandling = MergeArrayHandling.Union
