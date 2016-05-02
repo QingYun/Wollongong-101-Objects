@@ -1,0 +1,73 @@
+#object-page {
+  > .pure-g {
+    letter-spacing: normal;
+  }
+
+  .page-header {
+    text-decoration: none;
+    font-family: 'Lobster', cursive;
+    font-size: 72px;
+    text-align: center;
+
+    header {
+      padding: 1em 0;
+    }
+
+    span {
+      display: block;
+    }
+
+    &:visited {
+      @include inactive-state;
+    }
+  }
+
+  .obj-detail {
+    header {
+      font-size: 2em;
+      padding: .2em .5em;
+      @include active-state;
+    }
+
+    section {
+      padding: 1.5em;
+      font-size: 1.2em;
+      border-right: 5px solid $primary-color;
+
+      figure {
+        margin: 0;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      a, a:visited {
+        text-decoration: none;
+        @include inactive-state;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .obj-list {
+    border-top: 5px solid $primary-color;
+    padding-left: .5em;
+
+    a {
+      text-decoration: none;
+
+      div {
+        padding: .3em 0;
+        @include inactive-state;
+      }
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+$primary-color: #800000;
+$primary-inverse-color: white;
+$focus-color: #d8d8d8;
+
+@mixin active-state {
+  background-color: $primary-color;
+  color: $primary-inverse-color;
+}
+
+@mixin inactive-state {
+  background-color: $primary-inverse-color;
+  color: $primary-color;
+}
+
+@mixin focus-state {
+  background-color: $focus-color;
+}

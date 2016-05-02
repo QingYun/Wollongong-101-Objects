@@ -1,0 +1,14 @@
+.pure-g {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  @media (min-width: 48em) {
+      width: 750px;
+  }
+  @media (min-width: 64em) {
+      width: 970px;
+  }
+  @media (min-width: 80em) {
+      width: 1170px;
+  }
+}

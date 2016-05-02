@@ -1,0 +1,146 @@
+#index-page {
+  .page-header {
+    text-decoration: none;
+    font-family: 'Lobster', cursive;
+    font-size: 72px;
+    text-align: center;
+
+    header {
+      padding: 1em 0;
+    }
+
+    span {
+      display: block;
+    }
+
+    &:visited {
+      @include inactive-state;
+    }
+  }
+
+  .index-box {
+    .sort-control {
+      width: 100%;
+      border-bottom: 5px solid $primary-color;
+
+      button {
+        float: right;
+        cursor: pointer;
+        font-size: 1.5em;
+        padding: .5em;
+        border: none;
+        @include inactive-state;
+
+        &.active {
+          @include active-state;
+        }
+
+        &:not(.active):hover {
+          @include focus-state;
+        }
+      }
+
+      &::after {
+        content: ' ';
+        display: block;
+        clear: both;
+      }
+    }
+
+    .box {
+    }
+
+    .box.theme {
+      section {
+        header {
+          position: relative;
+          cursor: pointer;
+          font-size: 1.5em;
+          padding: .5em 1em;
+          border-bottom: 5px solid;
+          @include inactive-state;
+        }
+
+        header::after {
+          content: '';
+          position: absolute;
+          right: 1em;
+          border-left: .5em solid transparent;
+          border-right: .5em solid transparent;
+        }
+
+        figure {
+          cursor: pointer;
+          padding: 10px;
+          margin: 0px;
+
+          figcaption {
+            text-align: center;
+            margin: .5em;
+            @include inactive-state;
+          }
+        }
+
+        figure:hover {
+          @include focus-state;
+
+          figcaption {
+            @include focus-state;
+          }
+        }
+
+        .objects {
+          overflow: hidden;
+        }
+      }
+
+      section:not(.active) {
+        header:hover {
+          @include focus-state;
+        }
+
+        header::after {
+          border-top: .5em solid $primary-color;
+          top: 1em;
+        }
+
+        .objects {
+          max-height: 0;
+          transition: max-height 0s;
+        }
+      }
+
+      section.active {
+        header {
+          @include active-state;
+        }
+
+        header::after {
+          border-bottom: .5em solid $primary-inverse-color;
+          bottom: 1em;
+        }
+
+        .objects {
+          max-height: 999px;
+          transition: max-height 2s ease-out;
+        }
+      }
+    }
+
+    .box.all {
+      a {
+        text-decoration: none;
+
+        div {
+          font-size: 1.5em;
+          padding: .5em;
+          @include inactive-state;
+        }
+
+        div:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
