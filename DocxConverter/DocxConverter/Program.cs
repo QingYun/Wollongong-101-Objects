@@ -7,17 +7,35 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Reflection;
+using System.Security.Cryptography;
+using System.IO;
+using System.Drawing;
 
 namespace DocxConverter
 {
   class Program
   {
+    static string getImageHash(Image img)
+    {
+      var md5Hasher = MD5.Create();
+      var ms = new MemoryStream();
+      img.Save(ms, img.RawFormat);
+      var data = md5Hasher.ComputeHash(ms.ToArray());
+      var sb = new StringBuilder();
+      for (int i = 0; i < data.Length; i++)
+      {
+        sb.Append(data[i].ToString("x2"));
+      }
+      return sb.ToString();
+    }
+
     static IEnumerable<Tuple<string, WordprocessingDocument>> getDocs(string dir)
     {
-      var asset_folder = System.IO.Path.Combine(dir, "asset");
-      System.IO.Directory.CreateDirectory(asset_folder);
-      foreach (var file in System.IO.Directory.GetFiles(dir))
+      var asset_folder = Path.Combine(dir, "asset");
+      Directory.CreateDirectory(asset_folder);
+      var img_folder = Path.Combine(asset_folder, "img");
+      Directory.CreateDirectory(img_folder);
+      foreach (var file in Directory.GetFiles(dir))
       {
         yield return Tuple.Create(
           file, 
@@ -117,8 +135,8 @@ namespace DocxConverter
     {
       var file = pair.Item1;
       var doc = pair.Item2;
-      var file_name = System.IO.Path.GetFileName(file);
-      var file_path = System.IO.Path.GetDirectoryName(file);
+      var file_name = Path.GetFileName(file);
+      var file_path = Path.GetDirectoryName(file);
       var main_part = doc.MainDocumentPart;
 
       var paragraphs = protectOn(file_name, "description", () => new List<JArray>(),
@@ -129,8 +147,8 @@ namespace DocxConverter
             // remove empty lines
             .Where(p => p.HasChildren == true || p.InnerText.Length != 0)
             .Select(p => parseParagraph(p, hyperlinks))
-            // remove image-only paragraphs
-            .Where(p => p != null)
+            // remove image-only/lang paragraphs
+            .Where(p => p != null && p.Count != 0)
             .ToList();
         });
 
@@ -167,23 +185,21 @@ namespace DocxConverter
       var images = protectOn(file_name, "images", () => new JArray(),
         () =>
         {
-          if (name == "") return new JArray();
-
-          var obj_name = name.Replace(' ', '_');
           var image_parts = main_part.ImageParts;
-          var own_folder = System.IO.Path.Combine(file_path, "asset", obj_name);
-          System.IO.Directory.CreateDirectory(own_folder);
+          var own_folder = Path.Combine(file_path, "asset", "img");
           return image_parts
             .Select(
               img =>
               {
-                var img_name = System.IO.Path.GetFileName(img.Uri.OriginalString);
-                var img_path = System.IO.Path.Combine(own_folder, img_name);
-                var img_obj = System.Drawing.Image.FromStream(img.GetStream());
+                var img_name = Path.GetFileName(img.Uri.OriginalString);
+                var img_obj = Image.FromStream(img.GetStream());
+                var img_hash = getImageHash(img_obj);
+                var img_path = Path.Combine(own_folder, img_hash);
                 img_obj.Save(img_path);
                 return new {
                   type = "image",
-                  url = obj_name + "/" + img_name,
+                  key = img_hash,
+                  name = img_name,
                   contentType = img.ContentType,
                   height = img_obj.Height,
                   width = img_obj.Width
@@ -243,8 +259,8 @@ namespace DocxConverter
             objects = new JArray()
           }), formResultJSON);
 
-      using (var fs = System.IO.File.Open(System.IO.Path.Combine(dir, "asset", "data.json"), System.IO.FileMode.OpenOrCreate))
-      using (var sw = new System.IO.StreamWriter(fs))
+      using (var fs = File.Open(Path.Combine(dir, "asset", "data.json"), System.IO.FileMode.OpenOrCreate))
+      using (var sw = new StreamWriter(fs))
       using (var jw = new JsonTextWriter(sw))
       {
         jw.Formatting = Formatting.Indented;
