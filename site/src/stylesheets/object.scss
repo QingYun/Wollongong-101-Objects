@@ -8,6 +8,7 @@
     font-family: 'Lobster', cursive;
     font-size: 72px;
     text-align: center;
+    @include inactive-state;
 
     header {
       padding: 1em 0;
