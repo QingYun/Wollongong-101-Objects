@@ -102,6 +102,7 @@ function compileObjectPages(compile, data) {
 
       compile(slug(obj.name) + ".html", template, {
         name: obj.name,
+        author: obj.author,
         img_url: img? img.key : "",
         description: description,
         objects: obj_list

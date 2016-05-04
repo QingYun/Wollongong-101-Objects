@@ -36,6 +36,11 @@
       font-size: 1.2em;
       border-right: 5px solid $primary-color;
 
+      .author {
+        font-size: .8em;
+        text-align: right;
+      }
+
       figure {
         margin: 0;
 
