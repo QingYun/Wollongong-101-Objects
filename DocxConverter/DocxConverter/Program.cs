@@ -114,7 +114,7 @@ namespace DocxConverter
         p => p.Count == 1
               && p.First.Value<string>("type") == "text"
               && p.First.Value<string>("content").StartsWith(to_search, StringComparison.CurrentCultureIgnoreCase));
-      paragraphs.Except(targets);
+      paragraphs = paragraphs.Except(targets).ToList();
       return targets.ToList(); /*.First.Value<string>("content");*/
     }
 
@@ -185,6 +185,17 @@ namespace DocxConverter
               .Trim());
         });
 
+      var author = protectOn(file_name, "author", () => "", 
+        () => 
+        {
+          return takeParagraphStartWith(ref paragraphs, "author:")
+            .Select(p => p.First.Value<string>("content"))
+            .Single()
+            // remove "author:"
+            .Substring(7)
+            .Trim();
+        });
+
       var images = protectOn(file_name, "images", () => new JArray(),
         () =>
         {
@@ -221,6 +232,8 @@ namespace DocxConverter
         name = name,
         index = index,
         tags = tags,
+        author = author,
+        attachments = images,
         description = paragraphs
           .Aggregate(new JArray(),
             (arr, p) =>
@@ -231,8 +244,7 @@ namespace DocxConverter
                 content = p
               }));
               return arr;
-            }),
-        attachments = images
+            })
       });
 
       return obj;
