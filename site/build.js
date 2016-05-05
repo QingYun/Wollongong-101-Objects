@@ -1,16 +1,13 @@
-var webpack = require("webpack"),
-    chalk = require("chalk"),
-    Mustache = require("mustache"),
-    slug = require("slug"),
-    _ = require("lodash"),
-    minify = require("html-minifier").minify,
-    fs = require("fs"),
-    argv = require("optimist").argv,
-    path = require("path"),
-    data = require("./asset/data.json"),
-    webpack_config = require("./webpack.config.js");
+import chalk from "chalk";
+import slug from "slug";
+import Mustache from "mustache";
+import _ from "lodash";
+import fs from "fs";
+import path from "path";
+import {minify} from "html-minifier";
+import {argv} from "optimist";
 
-var compiler = webpack(webpack_config);
+import data from "./asset/data.json";
 
 function compileIndex(compile, data) {
   fs.readFile("./src/templates/index.mustache", function (err, template) {
@@ -147,45 +144,4 @@ function compileTemplates() {
   });
 }
 
-function onFinish(err, stats) {
-  if(err)
-    return handleFatalError(err);
-  var jsonStats = stats.toJson();
-  if(jsonStats.errors.length > 0)
-    return handleSoftErrors(jsonStats.errors);
-  if(jsonStats.warnings.length > 0)
-    handleWarnings(jsonStats.warnings);
-  console.log(chalk.green(stats.toString()));
-  compileTemplates();
-}
-
-function handleWarnings(warnings) {
-  warnings.forEach(function (warning) {
-    console.log(chalk.yellow(warning));
-  });
-  console.log("\n");
-}
-
-function handleSoftErrors(jsonStats, errors) {
-  console.log(chalk.red(jsonStats.toString()));
-  if (errors) {
-    errors.forEach(function (err) {
-      console.log(chalk.red(err));
-    });
-  }
-  console.log("\n");
-}
-
-function handleFatalError(err) {
-  console.log(chalk.bgRed(err) + "\n");
-}
-
-if (argv.watch) {
-  compiler.watch({
-    aggregateTimeout: 300,
-    poll: true
-  }, onFinish);
-} else {
-  console.log(chalk.blue("building site..."));
-  compiler.run(onFinish);
-}
+compileTemplates();

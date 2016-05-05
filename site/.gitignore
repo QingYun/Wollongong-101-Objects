@@ -38,9 +38,11 @@ jspm_packages
 
 # build result
 built
+build.built.js
 
 # webpack cache file
 webpack.cache.json
+webpack.cache.build.json
 
 # compiled docx files
 asset/*
