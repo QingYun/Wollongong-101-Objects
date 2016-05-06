@@ -24,13 +24,14 @@ function compileObjectPages(compile, data) {
   });
 }
 
-function compileToHTML(template, bundle_js) {
-  return function (file, sub_template, view) {
+function compileToHTML(template, bundle_js, style_css) {
+  return (file, sub_template, view) => {
     const sub_html = Mustache.render(sub_template.toString("utf8"), view);
 
     const result_html = Mustache.render(template.toString("utf8"), {
       prerendered_html: sub_html,
-      bundle_js: bundle_js
+      bundle_js,
+      style_css
     });
 
     let minified = "";
@@ -45,23 +46,27 @@ function compileToHTML(template, bundle_js) {
                     ${e}`));
     }
 
-    fs.writeFile(path.join("./built", file), minified, function (err) {
+    fs.writeFile(path.join("./built", file), minified, (err) => {
       if (err) return console.log(chalk.bgRed(err));
     });
   }
 }
 
 function compileTemplates() {
-  fs.readFile("./src/templates/root.mustache", function (err, template) {
+  fs.readFile("./src/templates/root.mustache", (err, template) => {
     if (err) return console.log(chalk.bgRed(err));
 
-    fs.readFile("./built/js/bundle.js", function (err, bundle_js) {
+    fs.readFile("./built/bundle.js", (err, bundle_js) => {
       if (err) return console.log(chalk.bgRed(err));
 
-      console.log(chalk.blue("compiling templates"));
-      const compile = compileToHTML(template, bundle_js);
-      compileIndex(compile, data);
-      compileObjectPages(compile, data);
+      fs.readFile("./built/style.css", (err, style_css) => {
+        if (err) return console.log(chalk.bgRed(err));
+
+        console.log(chalk.blue("compiling templates"));
+        const compile = compileToHTML(template, bundle_js, style_css);
+        compileIndex(compile, data);
+        compileObjectPages(compile, data);
+      });
     })
   });
 }

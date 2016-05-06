@@ -2,6 +2,7 @@ var webpack = require("webpack");
 var path = require("path");
 var production = process.env.NODE_ENV === 'production';
 var PersistentCacheWebpackPlugin = require('persistent-cache-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var plugins = [
   new PersistentCacheWebpackPlugin({
@@ -10,6 +11,9 @@ var plugins = [
     stats  : false,
     persist: true,
     ignore : []
+  }),
+  new ExtractTextPlugin("style.css", {
+    allChunks: true
   })
 ];
 
@@ -58,7 +62,7 @@ module.exports = {
     devtool: production ? false : 'eval',
     entry: path.join(__dirname, "src", "app.js"),
     output: {
-        path: path.join(__dirname, "built", "js"),
+        path: path.join(__dirname, "built"),
         filename: "bundle.js"
     },
     resolveLoader: {
@@ -75,8 +79,17 @@ module.exports = {
             }
           },
           { test: /\.json$/, loader: "json"},
-          { test: /\.scss$/, loaders: ["style", "css", "sass"] },
-          { test: /\.mustache$/, loader: 'mustache'}
+          {
+            test: /\.scss$/,
+            loader: ExtractTextPlugin.extract("style-loader",
+                                              "css-loader!sass-loader")
+          },
+          { test: /\.mustache$/, loader: 'mustache'},
+                  { test: /\.svg$/, loader: 'url?limit=65000&mimetype=image/svg+xml' },
+          { test: /\.woff$/, loader: 'url?limit=65000&mimetype=application/font-woff' },
+          { test: /\.woff2$/, loader: 'url?limit=65000&mimetype=application/font-woff2' },
+          { test: /\.[ot]tf$/, loader: 'url?limit=65000&mimetype=application/octet-stream' },
+          { test: /\.eot$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject' }
         ]
     },
     plugins: plugins
