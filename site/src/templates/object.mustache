@@ -15,7 +15,9 @@
         <header>{{name}}</header>
         <section>
           <figure>
-            <img src="img/{{img_url}}" alt={{name}} class="pure-img" />
+            <img src="img/{{img.url}}" alt={{name}} class="pure-img"
+                 height="{{img.height}}" width="{{img.width}}"
+                 style="height:{{img.height}}px; width:{{img.width}}px"/>
           </figure>
           {{#description}}
             <p>{{{paragraph}}}</p>
@@ -23,8 +25,8 @@
           <div rel="author" class="author">by {{author}}</div>
         </section>
       </article>
-    </div>
-    <div class="pure-u-1 pure-u-md-1-4 pure-u-xl-1-6">
+    </div><!--
+ --><div class="pure-u-1 pure-u-md-1-4 pure-u-xl-1-6">
       <aside class="obj-list">
         {{#objects}}
           <a href="{{{url}}}" class="navigate">

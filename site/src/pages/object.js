@@ -46,8 +46,12 @@ export function renderTemplate(data, obj_index) {
   return template({
     name: obj.name,
     author: obj.author,
-    img_url: img? img.key : "",
     description: description,
-    objects: obj_list
+    objects: obj_list,
+    img: {
+      url: img? img.key : "",
+      height: img? img.height : 0,
+      width: img? img.width : 0
+    }
   });
 }
