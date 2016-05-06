@@ -1,3 +1,5 @@
+import slug from "slug";
+
 import template from "../templates/index.mustache";
 
 function showElm(elm) {
@@ -46,7 +48,7 @@ function handleBtnClick({self, self_box, other, other_box}) {
 
 function handleSectionHeaderClick(sections, self_index) {
   return e => {
-    let self = sections.item(self_index);
+    const self = sections.item(self_index);
     if (isActive(self)) {
       deactivate(self);
     } else {
@@ -67,13 +69,21 @@ function attachThemeBoxActions(elm) {
   }
 }
 
+function toPairs(obj) {
+  let arr = [];
+  for (let k in obj) {
+    arr.push([k, obj[k]]);
+  }
+  return arr;
+}
+
 export function attachEvents(root_elm) {
-  let [by_theme_btn, by_index_btn] = [
+  const [by_theme_btn, by_index_btn] = [
     root_elm.querySelector(".index-box .sort-control .by-theme"),
     root_elm.querySelector(".index-box .sort-control .by-index")
   ];
 
-  let [by_theme_box, by_index_box] = [
+  const [by_theme_box, by_index_box] = [
     root_elm.querySelector(".index-box .box.theme"),
     root_elm.querySelector(".index-box .box.all")
   ];
@@ -96,40 +106,39 @@ export function attachEvents(root_elm) {
 }
 
 export function renderTemplate(data) {
-  var by_tag = _.chain(data.objects)
-    .reduce(function (acc, obj) {
-      return obj.tags.reduce(function (acc, tag) {
-        var img = obj.attachments.filter(function (attachment) {
-          return attachment.type === "image";
-        })[0];
+  const by_theme =
+    toPairs(data.objects.reduce((acc, obj) => {
+      return obj.tags.reduce((acc, tag) => {
+        const [img] = obj.attachments
+          .filter((attachment) => attachment.type === "image");
+
+        const page_url = `/${slug(obj.name)}.html?index=${obj.index}`;
 
         acc[tag] = (acc[tag] || []).concat({
           name: obj.name,
-          page_url: slug(obj.name),
+          page_url,
           img_url: img? img.key : ""
         });
         return acc;
       }, acc);
-    }, {})
-    .toPairs()
-    .map(function (pair) {
+    }, {}))
+    .map((pair) => {
       return {
         tag: pair[0],
         objects: pair[1]
       }
-    })
-    .value();
+    });
 
-  var by_index = _.chain(data.objects)
-    .map(function (obj) {
+  const by_index = data.objects
+    .map((obj) => {
+      const url = `/${slug(obj.name)}.html?index=${obj.index}`;
       return {
         name: obj.name,
         index: obj.index,
-        url: slug(obj.name)
+        url
       };
     })
-    .sortBy("index")
-    .value();
+    .sort((a, b) => a.index - b.index);
 
-  return template({by_tag, by_index});
+  return template({by_theme, by_index});
 }

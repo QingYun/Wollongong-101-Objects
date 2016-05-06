@@ -74,6 +74,7 @@ module.exports = {
               presets: ['es2015']
             }
           },
+          { test: /\.json$/, loader: "json"},
           { test: /\.scss$/, loaders: ["style", "css", "sass"] },
           { test: /\.mustache$/, loader: 'mustache'}
         ]

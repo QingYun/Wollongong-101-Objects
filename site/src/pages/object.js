@@ -1,44 +1,47 @@
+import slug from "slug";
+
 import template from "../templates/object.mustache";
+
+function renderAnchor(view) {
+  return `<a href=${view.target}>${view.text}</a>`
+}
 
 export function attachEvents(root_elm) {
 
 }
 
 export function renderTemplate(data, obj_index) {
-  var obj_list = _.chain(data.objects)
-    .map(function (obj) {
+  const obj = data.objects
+    .find((obj) => obj.index === obj_index);
+
+  const obj_list = data.objects
+    .map((obj) => {
+      const url = `/${slug(obj.name)}.html?index=${obj.index}`;
       return {
-        url: slug(obj.name),
         index: obj.index,
-        name: obj.name
+        name: obj.name,
+        url
       }
     })
-    .sortBy("index")
-    .value();
+    .sort((a, b) => a.index - b.index);
 
-  data.objects.forEach(function (obj) {
-    var img = obj.attachments.filter(function (attachment) {
-      return attachment.type === "image";
-    })[0];
+  const [img] = obj.attachments
+    .filter((attachment) => attachment.type === "image");
 
-    var description = _.chain(obj.description)
-      .filter(function (desc) {
-        return desc.type === "paragraph";
-      })
-      .map(function (p) {
-        var content = p.content.reduce(function (acc, c) {
-          if (c.type === "text") {
-            return acc + c.content;
-          } else if (c.type === "hyperlink") {
-            var link_html = Mustache.render(link_template, c.content);
-            return acc + link_html;
-          } else {
-            return acc;
-          }
-        }, "");
-        return {paragraph: content};
-      })
-      .value();
+  const description = obj.description
+    .filter((desc) => desc.type === "paragraph")
+    .map((p) => {
+      const content = p.content.reduce((acc, c) => {
+        if (c.type === "text") {
+          return acc + c.content;
+        } else if (c.type === "hyperlink") {
+          return acc + renderAnchor(c.content);
+        } else {
+          return acc;
+        }
+      }, "");
+      return {paragraph: content};
+    });
 
   return template({
     name: obj.name,
