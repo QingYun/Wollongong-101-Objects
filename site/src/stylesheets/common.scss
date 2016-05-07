@@ -6,7 +6,7 @@
     @include inactive-state;
   }
 
-  .text-box:hover {
+  &:hover {
     text-decoration: underline;
   }
 

@@ -13,12 +13,20 @@
     <div class="pure-u-1-1">
       <main class="index-box">
         <nav class="sort-control">
-          <button class="by-theme control-btn">By Theme</button>
-          <button class="by-index control-btn active">Show All</button>
+          <a href="/index-by-category.html"
+             class="by-theme control-btn navigate
+                    {{^byIndex}}active{{/byIndex}}">
+            By Category
+          </a>
+          <a href="/index-show-all.html"
+             class="by-index control-btn navigate
+                    {{^byTheme}}active{{/byTheme}}">
+            Show All
+          </a>
         </nav>
-        <article class="box theme hidden">
+        <article class="box theme {{^byTheme}}hidden{{/byTheme}}">
           {{#byTheme}}
-            <section class="theme-row">
+            <section class="theme-row active">
               <header>
                 {{tag}}
               </header>
@@ -39,7 +47,7 @@
             </section>
           {{/byTheme}}
         </article>
-        <article class="box all"><!--
+        <article class="box all {{^byIndex}}hidden{{/byIndex}}"><!--
           {{#byIndex}}
          --><div class="pure-u-1 pure-u-lg-1-2 pure-u-xl-1-3">
               <a href="{{{url}}}" class="navigate link large">

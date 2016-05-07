@@ -1,4 +1,5 @@
 import slug from 'slug';
+import objectAssign from 'object-assign';
 
 import template from '../templates/index.mustache';
 
@@ -61,6 +62,7 @@ function attachThemeBoxActions(elm) {
   const sections = elm.querySelectorAll('section');
   for (let i = 0; i < sections.length; i++) {
     const section = sections.item(i);
+    section.classList.remove('active');
     const header = section.querySelector('header');
     header.addEventListener('click', handleSectionHeaderClick(sections, i));
   }
@@ -72,7 +74,7 @@ function toPairs(obj) {
   return arr;
 }
 
-export function attachEvents(rootElm) {
+function attachByThemeEvents(rootElm) {
   const [byThemeBtn, byIndexBtn] = [
     rootElm.querySelector('.index-box .sort-control .by-theme'),
     rootElm.querySelector('.index-box .sort-control .by-index'),
@@ -100,7 +102,7 @@ export function attachEvents(rootElm) {
   attachThemeBoxActions(byThemeBox);
 }
 
-export function renderTemplate(data) {
+function renderByTheme(data) {
   const byTheme =
     toPairs(data.objects.reduce((tags, obj) => (
       obj.tags.reduce((tagsInObj, tag) => {
@@ -109,7 +111,7 @@ export function renderTemplate(data) {
 
         const pageUrl = `/${slug(obj.name)}.html?index=${obj.index}`;
 
-        return Object.assign(tagsInObj, {
+        return objectAssign(tagsInObj, {
           [tag]: (tagsInObj[tag] || []).concat({
             name: obj.name,
             pageUrl,
@@ -123,6 +125,10 @@ export function renderTemplate(data) {
       objects: pair[1],
     }));
 
+  return [template({ byTheme }), attachByThemeEvents];
+}
+
+function renderByIndex(data) {
   const byIndex = data.objects
     .map((obj) => {
       const url = `/${slug(obj.name)}.html?index=${obj.index}`;
@@ -134,5 +140,9 @@ export function renderTemplate(data) {
     })
     .sort((a, b) => a.index - b.index);
 
-  return template({ byTheme, byIndex });
+  return [template({ byIndex }), () => {}];
+}
+
+export function render(data, { section }) {
+  return (section === 'by theme' ? renderByTheme : renderByIndex)(data);
 }

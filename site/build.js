@@ -10,14 +10,19 @@ import * as ObjectPage from './src/pages/object.js';
 import * as IndexPage from './src/pages/index.js';
 
 function compileIndex(compile, data) {
-  compile('index.html', IndexPage.renderTemplate(data));
+  compile('index.html',
+          IndexPage.render(data, { section: 'by index' })[0]);
+  compile('index-show-all.html',
+          IndexPage.render(data, { section: 'by index' })[0]);
+  compile('index-by-category.html',
+          IndexPage.render(data, { section: 'by theme' })[0]);
   console.log(chalk.blue('index finished'));
 }
 
 function compileObjectPages(compile, data) {
   data.objects.forEach((obj, i) => {
     compile(`${slug(obj.name)}.html`,
-            ObjectPage.renderTemplate(data, obj.index));
+            ObjectPage.render(data, { objIndex: obj.index })[0]);
     console.log(chalk.blue(`${i}. ${obj.name} finished`));
   });
 }

@@ -1,4 +1,5 @@
 import Aviator from 'aviator';
+import objectAssign from 'object-assign';
 
 import './stylesheets/app.scss';
 import data from '../asset/data.json';
@@ -8,28 +9,41 @@ import * as ObjectPage from './pages/object.js';
 document.addEventListener('DOMContentLoaded', () => {
   const renderTarget = document.getElementById('render-target');
   const routingTarget = {
-    toIndex: () => {
-      Aviator.navigate('/index.html');
+    toShowAll: () => {
+      Aviator.navigate('/index-show-all.html', { replace: true });
     },
 
-    showIndex: () => {
-      renderTarget.innerHTML = IndexPage.renderTemplate(data);
-      IndexPage.attachEvents(renderTarget);
+    indexShowAll: () => {
+      const [htmlString, listenEvents] =
+        IndexPage.render(data, { section: 'show all' });
+      renderTarget.innerHTML = htmlString;
+      listenEvents(renderTarget);
+    },
+
+    indexByCategory: () => {
+      const [htmlString, listenEvents] =
+        IndexPage.render(data, { section: 'by theme' });
+      renderTarget.innerHTML = htmlString;
+      listenEvents(renderTarget);
     },
 
     showObject: (req) => {
       const objIndex = parseInt(req.params.index, 10);
       if (isNaN(objIndex)) return Aviator.navigate('/index.html');
-      renderTarget.innerHTML = ObjectPage.renderTemplate(data, objIndex);
-      ObjectPage.attachEvents(renderTarget);
+      const [htmlString, listenEvents] =
+        ObjectPage.render(data, { objIndex });
+      renderTarget.innerHTML = htmlString;
+      listenEvents(renderTarget);
       return true;
     },
   };
 
   Aviator.setRoutes({
     target: routingTarget,
-    '/': 'toIndex',
-    '/index.html': 'showIndex',
+    '/': 'toShowAll',
+    '/index.html': 'toShowAll',
+    '/index-show-all.html': 'indexShowAll',
+    '/index-by-category.html': 'indexByCategory',
     notFound: 'showObject',
   });
 
@@ -63,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .split('&')
         .reduce((acc, pairStr) => {
           const pair = pairStr.split('=');
-          return Object.assign(acc, {
+          return objectAssign(acc, {
             [pair[0]]: pair[1],
           });
         }, {});

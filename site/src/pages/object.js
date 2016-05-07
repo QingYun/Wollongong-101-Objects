@@ -6,11 +6,7 @@ function renderAnchor(view) {
   return `<a href=${view.target} class="link inline">${view.text}</a>`;
 }
 
-export function attachEvents(rootElm) {
-  return rootElm;
-}
-
-export function renderTemplate(data, objIndex) {
+export function render(data, { objIndex }) {
   const obj = data.objects
     .find((o) => o.index === objIndex);
 
@@ -42,7 +38,7 @@ export function renderTemplate(data, objIndex) {
       return { paragraph: content };
     });
 
-  return template({
+  const htmlString = template({
     name: obj.name,
     author: obj.author,
     description,
@@ -53,4 +49,6 @@ export function renderTemplate(data, objIndex) {
       width: img ? img.width : 0,
     },
   });
+
+  return [htmlString, () => {}];
 }
