@@ -1,4 +1,4 @@
-#object-page {
+.object-page {
   > .pure-g {
     letter-spacing: normal;
   }
@@ -22,60 +22,39 @@
       @include inactive-state;
     }
   }
+}
 
-  .obj-detail {
-    margin-bottom: 15em;
+.obj-detail {
+  margin-bottom: 15em;
 
-    header {
-      font-size: 2em;
-      padding: .2em .5em;
-      @include active-state;
-    }
-
-    section {
-      padding: 1.5em;
-      font-size: 1.2em;
-      border-right: 5px solid $primary-color;
-
-      .author {
-        font-size: .8em;
-        text-align: right;
-      }
-
-      figure {
-        margin: 0;
-
-        img {
-          width: 100%;
-        }
-      }
-
-      a, a:visited {
-        text-decoration: none;
-        @include inactive-state;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-    }
+  header {
+    font-size: 2em;
+    padding: .2em .5em;
+    @include active-state;
   }
 
-  .obj-list {
-    border-top: 5px solid $primary-color;
-    padding-left: .5em;
+  section {
+    padding: 1.5em;
+    font-size: 1.2em;
+    border-right: 5px solid $primary-color;
 
-    a {
-      text-decoration: none;
-
-      div {
-        padding: .3em 0;
-        @include inactive-state;
-      }
-    }
-
-    a:hover {
-      text-decoration: underline;
+    .author {
+      font-size: .8em;
+      text-align: right;
     }
   }
+}
+
+figure.sized {
+  margin: 0;
+
+  img {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.obj-list {
+  border-top: 5px solid $primary-color;
+  padding-left: .5em;
 }

@@ -1,4 +1,4 @@
-<div id="object-page">
+<div class="object-page">
   <div class="pure-g">
     <div class="pure-u-1-1">
       <a href="./index.html" class="page-header navigate">
@@ -14,7 +14,7 @@
       <article class="obj-detail">
         <header>{{name}}</header>
         <section>
-          <figure>
+          <figure class="sized">
             <img src="img/{{img.url}}" alt={{name}} class="pure-img"
                  height="{{img.height}}" width="{{img.width}}"
                  style="height:{{img.height}}px; width:{{img.width}}px"/>
@@ -29,8 +29,8 @@
  --><div class="pure-u-1 pure-u-md-1-4 pure-u-xl-1-6">
       <aside class="obj-list">
         {{#objects}}
-          <a href="{{{url}}}" class="navigate">
-            <div>{{index}}.{{name}}</div>
+          <a href="{{{url}}}" class="navigate link dense">
+            <div class="text-box">{{index}}.{{name}}</div>
           </a>
         {{/objects}}
       </aside>

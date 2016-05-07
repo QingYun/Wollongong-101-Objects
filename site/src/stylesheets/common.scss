@@ -1,0 +1,32 @@
+.link {
+  text-decoration: none;
+
+  .text-box {
+    padding: .5em;
+    @include inactive-state;
+  }
+
+  .text-box:hover {
+    text-decoration: underline;
+  }
+
+  &.large {
+    .text-box {
+      font-size: 1.5em;
+    }
+  }
+
+  &.dense {
+    .text-box {
+      padding: .3em 0;
+    }
+  }
+
+  &.inline {
+    @include inactive-state;
+
+    &:visited {
+      @include inactive-state;
+    }
+  }
+}

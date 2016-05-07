@@ -3,7 +3,7 @@ import slug from 'slug';
 import template from '../templates/object.mustache';
 
 function renderAnchor(view) {
-  return `<a href=${view.target}>${view.text}</a>`;
+  return `<a href=${view.target} class="link inline">${view.text}</a>`;
 }
 
 export function attachEvents(rootElm) {
