@@ -1,57 +1,56 @@
-import slug from "slug";
+import slug from 'slug';
 
-import template from "../templates/object.mustache";
+import template from '../templates/object.mustache';
 
 function renderAnchor(view) {
-  return `<a href=${view.target}>${view.text}</a>`
+  return `<a href=${view.target}>${view.text}</a>`;
 }
 
-export function attachEvents(root_elm) {
-
+export function attachEvents(rootElm) {
+  return rootElm;
 }
 
-export function renderTemplate(data, obj_index) {
+export function renderTemplate(data, objIndex) {
   const obj = data.objects
-    .find((obj) => obj.index === obj_index);
+    .find((o) => o.index === objIndex);
 
-  const obj_list = data.objects
-    .map((obj) => {
-      const url = `/${slug(obj.name)}.html?index=${obj.index}`;
+  const objList = data.objects
+    .map((o) => {
+      const url = `/${slug(o.name)}.html?index=${o.index}`;
       return {
-        index: obj.index,
-        name: obj.name,
-        url
-      }
+        index: o.index,
+        name: o.name,
+        url,
+      };
     })
     .sort((a, b) => a.index - b.index);
 
   const [img] = obj.attachments
-    .filter((attachment) => attachment.type === "image");
+    .filter((attachment) => attachment.type === 'image');
 
   const description = obj.description
-    .filter((desc) => desc.type === "paragraph")
+    .filter((desc) => desc.type === 'paragraph')
     .map((p) => {
       const content = p.content.reduce((acc, c) => {
-        if (c.type === "text") {
+        if (c.type === 'text') {
           return acc + c.content;
-        } else if (c.type === "hyperlink") {
+        } else if (c.type === 'hyperlink') {
           return acc + renderAnchor(c.content);
-        } else {
-          return acc;
         }
-      }, "");
-      return {paragraph: content};
+        return acc;
+      }, '');
+      return { paragraph: content };
     });
 
   return template({
     name: obj.name,
     author: obj.author,
-    description: description,
-    objects: obj_list,
+    description,
+    objects: objList,
     img: {
-      url: img? img.key : "",
-      height: img? img.height : 0,
-      width: img? img.width : 0
-    }
+      url: img ? img.key : '',
+      height: img ? img.height : 0,
+      width: img ? img.width : 0,
+    },
   });
 }

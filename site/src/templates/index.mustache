@@ -17,18 +17,18 @@
           <button class="by-index active">Show All</button>
         </nav>
         <article class="box theme hidden">
-          {{#by_theme}}
             <section>
+          {{#byTheme}}
               <header>
                 {{tag}}
               </header>
               <article class="objects"><!--
                 {{#objects}}
-              --><a href="{{{page_url}}}" class="navigate"><!--
+              --><a href="{{{pageUrl}}}" class="navigate"><!--
                  --><div class="pure-u-1 pure-u-md-1-2
                                 pure-u-lg-1-3 pure-u-xl-1-4">
                       <figure>
-                        <img src="img/{{img_url}}" alt={{name}}
+                        <img src="img/{{imgUrl}}" alt={{name}}
                              class="pure-img" />
                         <figcaption>{{name}}</figcaption>
                       </figure>
@@ -37,16 +37,16 @@
                 {{/objects}}
            --></article>
             </section>
-          {{/by_theme}}
+          {{/byTheme}}
         </article>
         <article class="box all"><!--
-          {{#by_index}}
+          {{#byIndex}}
          --><div class="pure-u-1 pure-u-lg-1-2 pure-u-xl-1-3">
               <a href="{{{url}}}" class="navigate">
                 <div>{{index}}.{{name}}</div>
               </a>
             </div><!--
-          {{/by_index}}
+          {{/byIndex}}
      --></article>
       </div>
     </main>
