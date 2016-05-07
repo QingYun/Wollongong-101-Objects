@@ -14,7 +14,8 @@ var plugins = [
   }),
   new ExtractTextPlugin("style.css", {
     allChunks: true
-  })
+  }),
+  new webpack.IgnorePlugin(/unicode\/category\/So/, /slug$/)
 ];
 
 if (production) {
@@ -84,8 +85,8 @@ module.exports = {
             loader: ExtractTextPlugin.extract("style-loader",
                                               "css-loader!sass-loader")
           },
-          { test: /\.mustache$/, loader: 'mustache'},
-                  { test: /\.svg$/, loader: 'url?limit=65000&mimetype=image/svg+xml' },
+          { test: /\.mustache$/, loader: path.join(__dirname, './mustache-loader.js')},
+          { test: /\.svg$/, loader: 'url?limit=65000&mimetype=image/svg+xml' },
           { test: /\.woff$/, loader: 'url?limit=65000&mimetype=application/font-woff' },
           { test: /\.woff2$/, loader: 'url?limit=65000&mimetype=application/font-woff2' },
           { test: /\.[ot]tf$/, loader: 'url?limit=65000&mimetype=application/octet-stream' },

@@ -87,7 +87,7 @@ module.exports = {
           },
           { test: /\.json$/, loader: "json"},
           { test: /\.scss$/, loaders: ["style", "css", "sass"] },
-          { test: /\.mustache$/, loader: 'mustache'}
+          { test: /\.mustache$/, loader: path.join(__dirname, './mustache-loader.js')}
         ]
     },
     plugins: plugins
