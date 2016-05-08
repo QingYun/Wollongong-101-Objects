@@ -65,7 +65,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, "built", "js"),
         filename: "bundle.js",
-        publicPath: "Wollongong-101-Objects/js/"
+        publicPath: "/Wollongong-101-Objects/js/"
     },
     resolveLoader: {
         modulesDirectories: ['node_modules']
