@@ -12,7 +12,7 @@ var plugins = [
     persist: true,
     ignore : []
   }),
-  new ExtractTextPlugin("style.css", {
+  new ExtractTextPlugin("../stylesheets/style.css", {
     allChunks: true
   }),
   new webpack.IgnorePlugin(/unicode\/category\/So/, /slug$/)
@@ -32,7 +32,7 @@ if (production) {
         // This plugin prevents Webpack from creating chunks
         // that would be too small to be worth loading separately
         new webpack.optimize.MinChunkSizePlugin({
-            minChunkSize: 51200, // ~50kb
+            minChunkSize: 25600,
         }),
 
         // This plugin minifies all the Javascript code of the final bundle
@@ -63,8 +63,9 @@ module.exports = {
     devtool: production ? false : 'eval',
     entry: path.join(__dirname, "src", "app.js"),
     output: {
-        path: path.join(__dirname, "built"),
-        filename: "bundle.js"
+        path: path.join(__dirname, "built", "js"),
+        filename: "bundle.js",
+        publicPath: "/js/"
     },
     resolveLoader: {
         modulesDirectories: ['node_modules']

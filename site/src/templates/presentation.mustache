@@ -1,0 +1,25 @@
+<div id="impress">
+  {{#objects}}
+    <article class="step slide pure-g" id="{{{slide_id}}}"
+             data-x="{{pos.x}}" data-y="{{pox.y}}">
+      <section class="pure-u-1-2 pane left">
+        <div class="pane-inner">
+          <header class="slide-header">{{name}}</header>
+          <figure class="no-margin">
+            <img src="img/{{img.url}}" alt={{name}} class="pure-img" />
+          </figure>
+        </div>
+      </section>
+      <div class="pure-u-1-2 pane right">
+        <section class="pane-inner vertical-center">
+          <div class="description">
+            {{#description}}
+              <p>{{{paragraph}}}</p>
+            {{/description}}
+          </div>
+          <div rel="author" class="author">by {{author}}</div>
+        </section>
+      </div>
+    </article>
+  {{/objects}}
+</div>

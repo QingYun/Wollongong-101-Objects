@@ -1,0 +1,58 @@
+#impress {
+  width: 100%;
+
+  > div {
+    width: 100%;
+  }
+}
+
+article.slide {
+  display: table;
+  padding: 40px 60px;
+  background-color: $slide-bg-color;
+  color: $slide-font-color;
+  text-shadow: 0 2px 2px $slide-font-shadow-color;
+
+  .link.inline {
+    color: $slide-font-color;
+
+    &:visited {
+      color: $slide-font-color;
+    }
+  }
+}
+
+.slide-header {
+  font-size: 3em;
+  text-align: left;
+  margin-bottom: .5em;
+  color: $primary-color;
+}
+
+.pane {
+  display: table-cell;
+  position: relative;
+
+  &.left .pane-inner {
+    padding-right: 2em;
+  }
+
+  &.right .pane-inner {
+    padding-left: 2em;
+  }
+
+  .description {
+    font-size: 1.2em;
+    line-height: 1.5em;
+  }
+
+  .author {
+    text-align: right;
+  }
+}
+
+.pane-inner.vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}

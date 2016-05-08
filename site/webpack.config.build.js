@@ -67,6 +67,9 @@ module.exports = {
     debug:   !production,
     entry: path.join(__dirname, "build.js"),
     target: "node",
+    node: {
+      __dirname: false,
+    },
     externals: nodeModules,
     output: {
         path: __dirname,

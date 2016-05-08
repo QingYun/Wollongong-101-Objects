@@ -15,3 +15,7 @@ $focus-color: #d8d8d8;
 @mixin focus-state {
   background-color: $focus-color;
 }
+
+$slide-font-color: rgb(102, 102, 102);
+$slide-font-shadow-color: rgba(0, 0, 0, .1);
+$slide-bg-color: #fff;

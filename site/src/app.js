@@ -5,36 +5,44 @@ import './stylesheets/app.scss';
 import data from '../asset/data.json';
 import * as IndexPage from './pages/index.js';
 import * as ObjectPage from './pages/object.js';
+import * as PresentationPage from './pages/presentation.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const renderTarget = document.getElementById('render-target');
+  function render(page, options) {
+    const [htmlString, listenEvents] = page.render(data, options);
+    renderTarget.innerHTML = htmlString;
+    listenEvents(renderTarget);
+  }
+
+  let inPresentation = false;
   const routingTarget = {
     toShowAll: () => {
       Aviator.navigate('/index-show-all.html', { replace: true });
     },
 
     indexShowAll: () => {
-      const [htmlString, listenEvents] =
-        IndexPage.render(data, { section: 'show all' });
-      renderTarget.innerHTML = htmlString;
-      listenEvents(renderTarget);
+      inPresentation = false;
+      render(IndexPage, { section: 'show all' });
     },
 
     indexByCategory: () => {
-      const [htmlString, listenEvents] =
-        IndexPage.render(data, { section: 'by theme' });
-      renderTarget.innerHTML = htmlString;
-      listenEvents(renderTarget);
+      inPresentation = false;
+      render(IndexPage, { section: 'by theme' });
     },
 
     showObject: (req) => {
+      inPresentation = false;
       const objIndex = parseInt(req.params.index, 10);
       if (isNaN(objIndex)) return Aviator.navigate('/index.html');
-      const [htmlString, listenEvents] =
-        ObjectPage.render(data, { objIndex });
-      renderTarget.innerHTML = htmlString;
-      listenEvents(renderTarget);
-      return true;
+      return render(ObjectPage, { objIndex });
+    },
+
+    showPresentation: () => {
+      if (!inPresentation) {
+        render(PresentationPage, {});
+        inPresentation = true;
+      }
     },
   };
 
@@ -44,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     '/index.html': 'toShowAll',
     '/index-show-all.html': 'indexShowAll',
     '/index-by-category.html': 'indexByCategory',
+    '/presentation.html': 'showPresentation',
     notFound: 'showObject',
   });
 
@@ -86,5 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     this.navigate(uri, options);
   };
 
+  Aviator.pushStateEnabled = true;
   Aviator.dispatch();
 });

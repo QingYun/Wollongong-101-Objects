@@ -38,7 +38,7 @@ jspm_packages
 
 # build result
 built
-build.built.js
+*build.built.js
 
 # webpack cache file
 webpack.cache.json

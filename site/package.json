@@ -29,6 +29,7 @@
     "eslint-plugin-import": "^1.7.0",
     "eslint-plugin-jsx-a11y": "^1.2.0",
     "eslint-plugin-react": "^5.0.1",
+    "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "hogan.js": "^3.0.2",

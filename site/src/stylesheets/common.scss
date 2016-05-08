@@ -8,6 +8,7 @@
 
   &:hover {
     text-decoration: underline;
+    @include inactive-state;
   }
 
   &.large {
@@ -29,4 +30,8 @@
       @include inactive-state;
     }
   }
+}
+
+.no-margin {
+  margin: 0;
 }
