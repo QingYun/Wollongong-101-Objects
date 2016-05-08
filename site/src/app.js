@@ -95,6 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     this.navigate(uri, options);
   };
 
-  Aviator.pushStateEnabled = true;
+  Aviator.root = '/Wollongong-101-Objects';
   Aviator.dispatch();
 });
